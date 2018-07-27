@@ -161,7 +161,7 @@
 	\inskip%
 	{\raggedleft\textsc{##1}\\[1pt]}
 	{##2}\\[2pt]
-	{\Large\textit{##3}}
+	{\large\textit{##3}}
         
 	\medskip
 	\renewcommand\inskip{\bigskip}}}
