@@ -27,7 +27,7 @@
               [2012/11/09 v1.0
  Two Column Curriculum Vitae]
 
-\LoadClass[letter,10pt]{scrartcm}
+\LoadClass[10pt]{scrartcl}
 
 \setcounter{secnumdepth}{-1}
 \RequirePackage[hmargin=1.25cm,vmargin=1.25cm,twocolumn,columnsep=1.25cm]{geometry}
@@ -63,18 +63,64 @@
 \setkomafont{disposition}{\color[HTML]{801010}}
 \setkomafont{section}{\scshape\Large\mdseries}
 
-% In tccv \part must contain the subject of the curriculum vitae.
+
+% Renders a personal data box:
+%
+% |[
+% \personal[optional: web site without scheme (no http:// prefix)]
+%          {address}{phone number}{email}
+% ]|
+\newcommand\personal[4]{%
+    \needspace{0.5\textheight}%
+    \newdimen\boxwidth%
+    \boxwidth=\dimexpr\linewidth-2\fboxsep\relax%
+    \colorbox[HTML]{F5DD9D} {%     
+    \begin{tabularx}{\boxwidth}{c|X}
+    \Writinghand & {#2}\smallskip\\
+    \Telefon     & {#3}\smallskip\\
+    \Letter      & \href{mailto:#4}{#4}
+    \smallskip\\
+    \Lightning & \href{http://#1}{#1}
+  \end{tabularx}}}
+
+\newcommand\personalwide[4]{%
+    \needspace{0.5\textheight}%
+    \newdimen\boxwidth%
+    \boxwidth=\dimexpr\linewidth/2-15\fboxsep\relax%
+    \colorbox[HTML]{F5DD9D} {%     
+    \begin{tabularx}{\boxwidth}{c|X}
+    \Writinghand & {#2}\smallskip\\
+    \Telefon     & {#3}\smallskip\\
+    \Letter      & \href{mailto:#4}{#4}
+    \smallskip\\
+    \Lightning & \href{http://#1}{#1}
+  \end{tabularx}}}
+
+% In tccv \part must contain the subject of the curriculum vitae and the title of the document
 % The command will start a new page and output in onecolumn the
-% subject (first and last name) with the hardcoded text
-% "Curriculum vitae" under it.
-\renewcommand\part[1]{%
+% subject (first and last name) with the title under it.
+\newcommand\headerbox[6]{%
     \twocolumn[%
     \begin{center}
 	\vskip-\lastskip%
 	{\usekomafont{part} #1} \medskip\\
-	{\fontfamily{pbsi}\selectfont\Huge Curriculum vitae}
+	{\fontfamily{pzc}\selectfont\Huge{#2}}
 	\bigskip
-    \end{center}]}
+        \personalwide{#3}{#4}{#5}{#6} 
+   \end{center}]}
+    % phv -helvetica
+    % pzc -cursive like
+\newcommand\headeronly[2]{%
+    \twocolumn[%
+    \begin{center}
+	\vskip-\lastskip%
+	{\usekomafont{part} #1} \medskip\\
+	{\fontfamily{pzc}\selectfont\Huge{#2}}
+	\bigskip
+        
+   \end{center}]}
+
+
 
 % Overrides the \section command to capitalize every
 % word for cosmetic purposes and draws a rule under it.
@@ -99,23 +145,7 @@
     \ifdefstrequal{\JOBNAME}{\PIVOT}{#2}{#3}%
 }
 
-% Renders a personal data box:
-%
-% |[
-% \personal[optional: web site without scheme (no http:// prefix)]
-%          {address}{phone number}{email}
-% ]|
-\newcommand\personal[4][]{%
-    \needspace{0.5\textheight}%
-    \newdimen\boxwidth%
-    \boxwidth=\dimexpr\linewidth-2\fboxsep\relax%
-    \colorbox[HTML]{F5DD9D}{%
-    \begin{tabularx}{\boxwidth}{c|X}
-    \Writinghand & {#2}\smallskip\\
-    \Telefon     & {#3}\smallskip\\
-    \Letter      & \href{mailto:#4}{#4}
-    \ifstrempty{#1}{}{\smallskip\\ \Lightning & \href{http://#1}{#1}}
-    \end{tabularx}}}
+
 
 % Every \item can be followed by one or more paragraphs
 % of description:
@@ -132,9 +162,11 @@
 	{\raggedleft\textsc{##1}\\[1pt]}
 	{##2}\\[2pt]
 	{\Large\textit{##3}}
+        
 	\medskip
 	\renewcommand\inskip{\bigskip}}}
     {\bigskip}
+
 
 % Use only \item inside this environment: no other macros
 % are allowed:
